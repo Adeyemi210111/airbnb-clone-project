@@ -62,6 +62,18 @@ Airbnb-Clone/
 
 This project is primarily for **learning and practice**, but contributions, suggestions, and improvements are welcome. Fork the repo, create a feature branch, and submit a pull request.
 
+## 👥 Team Roles
+| **Role**                            | **Responsibilities**                                                                                                                                                                    |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Backend Developer**               | Designs and implements the server-side logic of the application. Builds APIs, manages authentication/authorization, integrates business logic, and ensures scalability and security.    |
+| **Database Administrator (DBA)**    | Manages database schema, queries, and optimization. Ensures data integrity, backup, recovery, and performance tuning. Collaborates with backend developers for efficient data handling. |
+| **Frontend Developer** *(optional)* | Creates the user interface and client-side logic. Consumes backend APIs to display data, manage forms, and deliver smooth user experiences.                                             |
+| **DevOps Engineer**                 | Manages deployment, monitoring, and CI/CD pipelines. Ensures consistency across environments using tools like Docker and cloud platforms.                                               |
+| **QA Engineer / Tester**            | Ensures quality through unit, integration, and automated tests. Identifies bugs, verifies fixes, and validates that requirements are met.                                               |
+| **Project Manager / Scrum Master**  | Coordinates workflows, manages tasks and deadlines, facilitates collaboration, and ensures agile practices are followed.                                                                |
+| **Security Specialist**             | Ensures data protection and system security. Implements secure authentication/authorization, conducts vulnerability testing, and enforces best practices.                               |
+
+
 ---
 
 ## 📜 License
