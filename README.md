@@ -206,6 +206,108 @@ Below are the core entities and how they relate in an Airbnb-style booking platf
 
 ---
 
+## 🔒 API Security
+
+Building a booking platform means handling sensitive data (identities, payment intents, availability). This project follows defense‑in‑depth with multiple controls across authentication, authorization, transport, storage, and runtime.
+
+### Core Measures
+
+* **Authentication**
+
+  * **JWT access + refresh tokens** (short‑lived access, rotating refresh); optional cookie-based sessions for web.
+  * **Password hashing** with Argon2 or bcrypt; email verification & optional MFA.
+  * **Brute‑force protection** (login attempt throttling, account lockouts with safe recovery).
+
+* **Authorization (RBAC & Ownership)**
+
+  * Role-based access control: `guest`, `host`, `admin`.
+  * Ownership checks on resources (e.g., hosts can only mutate their own properties; guests only their bookings).
+  * Scoped endpoints and least-privilege service accounts.
+
+* **Input Validation & Output Encoding**
+
+  * Centralized request validation (e.g., Pydantic/FastAPI or serializers in Django).
+  * Strict types, length limits, whitelist enums; sanitize user-generated content; safe error messages.
+
+* **Rate Limiting & Abuse Prevention**
+
+  * Global and per‑IP limits (e.g., 60 req/min), stricter on auth & search endpoints.
+  * Bot/abuse detection signals; pagination caps; file upload size/type checks.
+
+* **Transport Security**
+
+  * **TLS-only** (HTTPS) everywhere; strict redirects; HSTS; no mixed content.
+  * Secure cookie flags (`HttpOnly`, `Secure`, `SameSite`).
+
+* **Data Protection at Rest**
+
+  * Encrypt secrets and sensitive fields (e.g., payment tokens) at rest.
+  * Never store raw card data—use a PCI-compliant payment provider; store only provider tokens/IDs.
+
+* **CORS & Security Headers**
+
+  * Restrictive CORS (explicit origins, methods, headers).
+  * Secure headers: `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`.
+
+* **Secrets & Config Management**
+
+  * Environment variables (no secrets in code); secret rotation policy.
+  * Separate configs per environment; principle of least privilege for DB/users.
+
+* **Logging, Monitoring & Auditing**
+
+  * Structured logs (no PII, no secrets); correlation IDs per request.
+  * Audit trails for auth events, payouts, booking state changes.
+  * Alerting on anomalies (auth failures spikes, 5xx bursts).
+
+* **Dependency & Supply Chain Security**
+
+  * Pin & regularly update dependencies; vulnerability scanning (e.g., `pip-audit`, `npm audit` if applicable).
+  * Integrity checks in CI; signed container images (if using Docker).
+
+* **Backups & Recovery**
+
+  * Automated encrypted DB backups; periodic restore drills.
+  * Idempotent payment webhooks and replay protection (signatures + timestamps).
+
+* **OWASP Top 10 Coverage**
+
+  * Prevent injection (ORM parameterization), broken auth (short‑lived tokens), sensitive data exposure (TLS+encryption),
+    SSRF/XXE (safe parsers), security misconfig (infra as code checks), and more.
+
+### Why Security Is Crucial (by Area)
+
+* **Protecting User Data**
+  Personally identifiable information (PII) and account credentials must remain confidential and tamper‑proof to maintain user trust and comply with regulations.
+
+* **Securing Payments**
+  Payment flows are prime fraud targets; strict provider tokenization, signed webhooks, and audit trails prevent theft, double charging, and chargeback abuse.
+
+* **Preserving Booking Integrity**
+  Accurate availability and non‑overlapping reservations require strong authorization and idempotent operations to prevent race conditions and manipulation.
+
+* **Platform Reliability & Abuse Control**
+  Rate limits, monitoring, and anomaly detection keep the API performant and resilient against scraping, DoS, and brute‑force attacks.
+
+* **Operational Safety**
+  Proper secrets management, least privilege, backups, and tested recovery plans reduce blast radius and speed up remediation when incidents occur.
+
+### Env & Operational Notes (quick start)
+
+```
+# Required (examples)
+JWT_SECRET=change_me
+JWT_ACCESS_TTL_MIN=15
+JWT_REFRESH_TTL_DAYS=7
+DATABASE_URL=postgresql://user:pass@host:5432/airbnb_clone
+ALLOWED_ORIGINS=https://your-frontend.app
+RATE_LIMIT=60/minute
+PAYMENT_PROVIDER_KEY=pk_live_xxx
+LOG_LEVEL=INFO
+```
+
+---
+
 ## 📜 License
 
 This project is for educational purposes and is not intended for commercial use.
