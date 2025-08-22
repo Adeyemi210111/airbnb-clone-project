@@ -19,7 +19,7 @@ This project is part of my **ALX Pro Backend Development program**, serving as a
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
 * **Backend Framework:** Python (Flask / FastAPI / Django — depending on scope)
 * **Database:** MySQL / PostgreSQL
