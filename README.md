@@ -76,6 +76,114 @@ This project is primarily for **learning and practice**, but contributions, sugg
 
 ---
 
+## 🗃️ Database Design
+
+Below are the core entities and how they relate in an Airbnb-style booking platform. This design prioritizes data integrity, performance, and clear ownership links.
+
+### Entities & Key Fields
+
+#### 1) Users
+
+* **id** (PK, UUID/int): unique user identifier
+* **full\_name** (string): user’s display name
+* **email** (string, unique): login/communication
+* **password\_hash** (string): securely stored credential
+* **role** (enum: `guest`, `host`, `admin`): access/permissions
+
+#### 2) Properties
+
+* **id** (PK): unique property identifier
+* **host\_id** (FK → Users.id): owner/host of the listing
+* **title** (string): listing headline
+* **address** (JSON or structured fields): street, city, state, country, lat/long
+* **price\_per\_night** (decimal): base nightly rate
+
+#### 3) Bookings
+
+* **id** (PK): unique booking identifier
+* **guest\_id** (FK → Users.id): who booked
+* **property\_id** (FK → Properties.id): which listing
+* **check\_in / check\_out** (date): stay duration
+* **status** (enum: `pending`, `confirmed`, `canceled`, `completed`)
+
+#### 4) Reviews
+
+* **id** (PK): unique review identifier
+* **booking\_id** (FK → Bookings.id): ties review to a completed stay
+* **author\_id** (FK → Users.id): reviewer (guest or host)
+* **rating** (int 1–5): score
+* **comment** (text): feedback
+
+#### 5) Payments
+
+* **id** (PK): unique payment identifier
+* **booking\_id** (FK → Bookings.id): what this payment is for
+* **amount** (decimal): charged total
+* **currency** (string, e.g., `NGN`, `USD`)
+* **status** (enum: `initiated`, `authorized`, `captured`, `refunded`, `failed`)
+
+> **Optional supporting tables (recommended for production):**
+> `PropertyImages(id, property_id, url, is_primary)`, `Amenities(id, name)`, `PropertyAmenities(property_id, amenity_id)`, `Wishlists(user_id, property_id)`, `Payouts(host_id, amount, status)`.
+
+---
+
+### Relationships (Cardinality & Ownership)
+
+* **User ↔ Properties:**
+
+  * **One (host) → Many (properties)**: A user with role `host` can create multiple properties.
+  * `Properties.host_id` → `Users.id`.
+
+* **User ↔ Bookings:**
+
+  * **One (guest) → Many (bookings)**: A guest can make many bookings over time.
+  * `Bookings.guest_id` → `Users.id`.
+
+* **Property ↔ Bookings:**
+
+  * **One (property) → Many (bookings)**: A property can have many bookings across dates.
+  * `Bookings.property_id` → `Properties.id`.
+  * **Business rule:** enforce non-overlapping date ranges per property.
+
+* **Booking ↔ Reviews:**
+
+  * **One (booking) → One (review) per reviewer type**: Typically one guest review per completed booking; optionally a host review (if supported).
+  * `Reviews.booking_id` → `Bookings.id`.
+  * **Business rule:** only allow reviews after `check_out` and when booking `status = completed`.
+
+* **Booking ↔ Payments:**
+
+  * **One (booking) → One/Many (payments)**: Usually one captured payment; may include refunds or partial captures.
+  * `Payments.booking_id` → `Bookings.id`.
+
+* **User (host) ↔ Payouts (optional):**
+
+  * **One (host) → Many (payouts)**: Aggregate completed bookings minus fees → payouts to host.
+
+---
+
+### Notes on Integrity & Indexing
+
+* **Unique constraints:** `Users.email`, optionally `(property_id, check_in, check_out)` overlap checks via exclusion/constraints at app or DB level.
+* **Indexes:**
+
+  * `Bookings(property_id, check_in, check_out)` for availability searches
+  * `Properties(host_id)`, `Bookings(guest_id)`, `Reviews(booking_id)`, `Payments(booking_id)`
+  * Geo/FTS indexes if searching by location or text.
+
+---
+
+### Example ER Tips (non-exhaustive)
+
+* **Cascade rules:**
+
+  * Deleting a **User** who is a **host** should be restricted if they own properties; soft-delete instead.
+  * Deleting a **Booking** should restrict if a **Payment** exists; use refunds + status changes rather than deletes.
+* **Security:** never store raw card data; integrate a PCI-compliant provider and persist only tokens/IDs.
+* **Auditing:** add `created_at`, `updated_at`, and optional `deleted_at` to all tables.
+
+---
+
 ## 📜 License
 
 This project is for educational purposes and is not intended for commercial use.
