@@ -308,6 +308,32 @@ LOG_LEVEL=INFO
 
 ---
 
+## 🔄 CI/CD Pipeline
+
+### What is CI/CD?
+
+**Continuous Integration (CI)** and **Continuous Deployment (CD)** are practices that automate the process of building, testing, and deploying applications.
+
+* **CI (Continuous Integration):** Ensures that every new code change is automatically built, tested, and validated before merging into the main branch.
+* **CD (Continuous Deployment/Delivery):** Automates the release process so that changes can be reliably deployed to staging or production environments with minimal manual intervention.
+
+### Why It Matters for This Project
+
+* **Consistency:** Ensures that the Airbnb Clone application behaves the same across development, staging, and production.
+* **Faster Feedback:** Automated tests catch bugs early, reducing the risk of deploying broken code.
+* **Scalability:** Enables the project to handle more features and contributors without compromising quality.
+* **Reliability:** Automates repetitive tasks, reduces human error, and ensures stable releases.
+
+### Tools & Technologies
+
+* **GitHub Actions:** Automates builds, tests, and deployment workflows directly from GitHub.
+* **Docker:** Provides containerization to ensure consistent environments across development and production.
+* **pytest/unittest:** For running automated unit and integration tests.
+* **Heroku / Render / AWS:** Deployment targets for staging and production environments.
+* **SonarQube / CodeQL (optional):** For static code analysis and security scanning.
+
+---
+
 ## 📜 License
 
 This project is for educational purposes and is not intended for commercial use.
