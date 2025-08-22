@@ -33,16 +33,38 @@ This project is part of my **ALX Pro Backend Development program**, serving as a
 
 ---
 
-## 🚀 Features (Planned)
+## 🧩 Feature Breakdown
 
-* User registration and authentication
-* Create, read, update, and delete (CRUD) operations for listings
-* Booking and reservation system
-* Search and filter functionality for listings
-* User reviews and ratings
-* Secure handling of user data and sessions
+### 🔐 User Management
+
+Handles **registration, login, authentication, and profile management** for users (guests, hosts, and admins). This feature ensures secure access control, allowing users to create accounts, manage their details, and interact with the platform safely.
+
+### 🏡 Property Management
+
+Allows hosts to **create, update, and manage property listings** with details such as title, description, price, location, and images. This feature enables hosts to showcase their accommodations and ensures that guests can browse and filter through available options.
+
+### 📅 Booking System
+
+Provides functionality for guests to **book available properties** by selecting dates, confirming reservations, and tracking booking status. It ensures accurate availability handling, prevents overlapping reservations, and supports smooth communication between hosts and guests.
+
+### 💳 Payment Integration
+
+Enables secure **payment processing for bookings**, including initiating, confirming, and refunding transactions. This feature ensures hosts are paid, guests are charged correctly, and all transactions remain transparent and secure.
+
+### ⭐ Reviews & Ratings
+
+Allows guests (and optionally hosts) to **leave feedback on completed stays**. Ratings and written reviews help build trust in the platform, provide transparency, and improve decision-making for future users.
+
+### 🛡️ Security & Authorization
+
+Implements best practices for **authentication, authorization, and data protection**. This includes encrypted password storage, session management, and role-based access control to safeguard both user data and system integrity.
+
+### ⚙️ Admin Dashboard *(future scope)*
+
+Provides administrators with tools to **monitor platform activities**, manage users, resolve disputes, and oversee listings and bookings. This ensures the system remains reliable, compliant, and trustworthy for all participants.
 
 ---
+
 
 ## 📂 Project Structure (to be updated as project evolves)
 
